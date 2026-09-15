@@ -22,16 +22,16 @@ import firebaseConfig from '../firebase-applet-config.json';
 import { UserProfile, SubscriptionTier, ManualPaymentRequest } from '../types';
 import { getPlanLimits } from './authService';
 
-// Dynamic Firebase API Key configuration with strict fallback
+// Dynamic Firebase API Key configuration from environment variables
 const FIREBASE_API_KEY = (
   (import.meta.env && import.meta.env.VITE_FIREBASE_API_KEY) ||
   firebaseConfig.apiKey ||
-  'AIzaSyC5OOYpJv06xreikw1aOqUBA8Swgh62R30'
+  ''
 ).trim();
 
 const activeFirebaseConfig = {
   ...firebaseConfig,
-  apiKey: FIREBASE_API_KEY || 'AIzaSyC5OOYpJv06xreikw1aOqUBA8Swgh62R30'
+  apiKey: FIREBASE_API_KEY
 };
 
 // Initialize Firebase App
