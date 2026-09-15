@@ -22,13 +22,28 @@ import firebaseConfig from '../firebase-applet-config.json';
 import { UserProfile, SubscriptionTier, ManualPaymentRequest } from '../types';
 import { getPlanLimits } from './authService';
 
+// Dynamic Firebase API Key configuration with strict fallback
+const FIREBASE_API_KEY = (
+  (import.meta.env && import.meta.env.VITE_FIREBASE_API_KEY) ||
+  firebaseConfig.apiKey ||
+  'AIzaSyC5OOYpJv06xreikw1aOqUBA8Swgh62R30'
+).trim();
+
+const activeFirebaseConfig = {
+  ...firebaseConfig,
+  apiKey: FIREBASE_API_KEY || 'AIzaSyC5OOYpJv06xreikw1aOqUBA8Swgh62R30'
+};
+
 // Initialize Firebase App
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(activeFirebaseConfig);
 
 // CRITICAL: Initialize Firestore with the project's specific database ID
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app, activeFirebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
 
 export enum OperationType {
   CREATE = 'create',
