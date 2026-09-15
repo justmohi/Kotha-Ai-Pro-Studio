@@ -1,0 +1,74 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with subscription tier and generation credit status",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "photoURL": { "type": "string", "description": "Avatar image URL" },
+        "tier": { "type": "string", "enum": ["free", "basic", "plus", "pro"], "description": "Subscription tier level" },
+        "monthlyLimit": { "type": "integer", "description": "Allowed generations per month (-1 for unlimited)" },
+        "maxDurationSeconds": { "type": "integer", "description": "Max clip length in seconds" },
+        "creditsUsed": { "type": "integer", "description": "Number of generations used in current cycle" },
+        "isGoogleUser": { "type": "boolean", "description": "Whether user authenticated via Google" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of last update" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of account creation" }
+      },
+      "required": ["uid", "email", "tier", "monthlyLimit", "maxDurationSeconds", "creditsUsed"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Payment transaction history for subscriptions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique transaction ID" },
+        "userId": { "type": "string", "description": "Firebase Auth UID of customer" },
+        "tier": { "type": "string", "enum": ["basic", "plus", "pro"], "description": "Purchased tier" },
+        "amount": { "type": "number", "description": "Transaction amount in USD or BDT" },
+        "currency": { "type": "string", "description": "Currency code" },
+        "provider": { "type": "string", "description": "Payment gateway provider (stripe, sslcommerz)" },
+        "status": { "type": "string", "enum": ["pending", "completed", "failed"], "description": "Payment status" },
+        "createdAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["id", "userId", "tier", "amount", "currency", "provider", "status"]
+    },
+    "PaymentRequest": {
+      "title": "PaymentRequest",
+      "description": "Manual payment submission proof for subscription upgrade",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique payment request ID" },
+        "userId": { "type": "string", "description": "Firebase Auth UID or local identifier" },
+        "userEmail": { "type": "string", "description": "User email address" },
+        "userName": { "type": "string", "description": "Display name of customer" },
+        "tier": { "type": "string", "enum": ["basic", "plus", "pro"], "description": "Selected subscription tier" },
+        "planName": { "type": "string", "description": "Plan display name" },
+        "planPrice": { "type": "string", "description": "Plan cost display" },
+        "method": { "type": "string", "enum": ["bKash", "Binance Pay"], "description": "Payment method" },
+        "trxId": { "type": "string", "description": "Payment transaction ID or hash" },
+        "senderDetails": { "type": "string", "description": "Sender phone number last 4 digits or Binance Pay ID" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"], "description": "Verification status" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of submission" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of last review" }
+      },
+      "required": ["id", "userId", "userEmail", "tier", "method", "trxId", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles storing subscription tier and monthly credit usage"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": { "$ref": "#/entities/Transaction" },
+      "description": "User subscription payment transactions and history"
+    },
+    "/payment_requests/{requestId}": {
+      "schema": { "$ref": "#/entities/PaymentRequest" },
+      "description": "Manual payment proofs submitted by users awaiting admin verification"
+    }
+  }
+}
