@@ -135,7 +135,7 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto"
       onClick={onClose}
     >
       <motion.div
@@ -143,37 +143,41 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden relative my-6"
+        className="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-y-auto max-h-[90vh] relative my-auto scrollbar-thin"
       >
-        {/* Header */}
-        <div className="bg-radial from-slate-900 via-indigo-950 to-slate-950 text-white p-6 relative">
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close dialog"
-            title="Close (Esc)"
-            className="absolute top-5 right-5 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 border border-white/20 text-slate-200 hover:text-white flex items-center justify-center transition-all shadow-sm cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
+        {/* Header - Sticky */}
+        <div className="sticky top-0 bg-slate-900 text-white p-5 sm:p-6 z-20 border-b border-slate-800 shadow-sm">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+                  Manual Payment
+                </span>
+                <span className="text-xs text-slate-400 font-semibold">•</span>
+                <span className="text-xs text-slate-300 font-medium">Step 2 of 2</span>
+              </div>
 
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
-              Manual Payment
-            </span>
-            <span className="text-xs text-slate-400 font-semibold">•</span>
-            <span className="text-xs text-slate-300 font-medium">Step 2 of 2</span>
+              <h2 className="text-lg sm:text-xl font-black tracking-tight text-white flex flex-wrap items-center gap-2">
+                <span>Subscribe to {plan.name}</span>
+                <span className="text-xs bg-indigo-600 text-white px-2 py-0.5 rounded-md font-bold">
+                  {plan.price}
+                </span>
+              </h2>
+              <p className="text-xs text-slate-300 mt-1">
+                Send payment using bKash or Binance Pay, then submit your transaction proof below.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close dialog"
+              title="Close (Esc)"
+              className="flex-shrink-0 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 border border-white/20 text-slate-200 hover:text-white flex items-center justify-center transition-all shadow-sm cursor-pointer ml-1"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-
-          <h2 className="text-xl font-black tracking-tight text-white flex items-center gap-2">
-            <span>Subscribe to {plan.name}</span>
-            <span className="text-xs bg-indigo-600 text-white px-2 py-0.5 rounded-md font-bold">
-              {plan.price}
-            </span>
-          </h2>
-          <p className="text-xs text-slate-300 mt-1">
-            Send payment using bKash or Binance Pay, then submit your transaction proof below.
-          </p>
         </div>
 
         {/* Modal Body */}
