@@ -18,27 +18,46 @@ import {
   collection,
   addDoc
 } from 'firebase/firestore';
-import firebaseConfig from '../firebase-applet-config.json';
 import { UserProfile, SubscriptionTier, ManualPaymentRequest } from '../types';
 import { getPlanLimits } from './authService';
 
-// Dynamic Firebase API Key configuration from environment variables
-const FIREBASE_API_KEY = (
-  (import.meta.env && import.meta.env.VITE_FIREBASE_API_KEY) ||
-  firebaseConfig.apiKey ||
-  ''
-).trim();
-
-const activeFirebaseConfig = {
-  ...firebaseConfig,
-  apiKey: FIREBASE_API_KEY
+// Dynamic Firebase configuration powered strictly by environment variables with fallback defaults
+export const firebaseConfig = {
+  apiKey: (
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_API_KEY) ||
+    ''
+  ).trim(),
+  authDomain: (
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_AUTH_DOMAIN) ||
+    'premium-flash.firebaseapp.com'
+  ),
+  projectId: (
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_PROJECT_ID) ||
+    'premium-flash'
+  ),
+  storageBucket: (
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_STORAGE_BUCKET) ||
+    'premium-flash.firebasestorage.app'
+  ),
+  messagingSenderId: (
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_MESSAGING_SENDER_ID) ||
+    '1085420561189'
+  ),
+  appId: (
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_APP_ID) ||
+    '1:1085420561189:web:6e852df61272e2a27ff0cc'
+  ),
+  firestoreDatabaseId: (
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_DATABASE_ID) ||
+    'ai-studio-kothaproaivoices-2648689c-40a3-49a5-83f1-18d4db5eaffd'
+  )
 };
 
 // Initialize Firebase App
-const app = initializeApp(activeFirebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 // CRITICAL: Initialize Firestore with the project's specific database ID
-export const db = getFirestore(app, activeFirebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
