@@ -45,8 +45,8 @@ async function startServer() {
     res.json({ status: 'ok', timestamp: Date.now() });
   });
 
-  // TTS Generation Endpoint
-  app.post('/api/tts', async (req, res) => {
+  // TTS Generation Endpoint (supports both /api/tts and /api/generate-voice)
+  app.post(['/api/tts', '/api/generate-voice'], async (req, res) => {
     try {
       const {
         text,

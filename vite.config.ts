@@ -12,12 +12,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  optimizeDeps: {
-    exclude: ['@google/genai'],
-  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
+      'p-retry': path.resolve(__dirname, './services/p-retry-shim.ts'),
     }
   }
 });
