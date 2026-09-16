@@ -53,7 +53,8 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        e.preventDefault();
         onClose();
       }
     };
@@ -135,15 +136,17 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto"
+      id="manual-payment-backdrop"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto cursor-pointer"
       onClick={onClose}
     >
       <motion.div
+        id="manual-payment-modal-content"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-y-auto max-h-[90vh] relative my-auto scrollbar-thin"
+        className="cursor-default bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-y-auto max-h-[90vh] relative my-auto scrollbar-thin"
       >
         {/* Header - Sticky */}
         <div className="sticky top-0 bg-slate-900 text-white p-5 sm:p-6 z-20 border-b border-slate-800 shadow-sm">
@@ -170,12 +173,13 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
 
             <button
               type="button"
+              id="close-manual-payment-btn"
               onClick={onClose}
               aria-label="Close dialog"
               title="Close (Esc)"
-              className="flex-shrink-0 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 border border-white/20 text-slate-200 hover:text-white flex items-center justify-center transition-all shadow-sm cursor-pointer ml-1"
+              className="flex-shrink-0 w-10 h-10 rounded-full bg-slate-800/80 hover:bg-slate-700 active:bg-slate-600 border border-slate-600/80 text-slate-200 hover:text-white flex items-center justify-center transition-all shadow-md cursor-pointer ml-1 hover:scale-105"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 stroke-[2.5]" />
             </button>
           </div>
         </div>
@@ -440,14 +444,16 @@ export const ManualPaymentModal: React.FC<ManualPaymentModalProps> = ({
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
+                    id="manual-payment-cancel-btn"
                     onClick={onClose}
-                    className="w-1/3 sm:w-2/5 py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 text-xs font-bold border border-slate-200 hover:border-slate-300 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-1/3 sm:w-2/5 py-3 px-3 sm:px-4 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 text-xs font-bold border border-slate-200 hover:border-slate-300 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span>Go Back</span>
+                    <ArrowLeft className="w-4 h-4 shrink-0" />
+                    <span>Cancel / Go Back</span>
                   </button>
                   <button
                     type="submit"
+                    id="manual-payment-submit-btn"
                     disabled={isSubmitting}
                     className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 active:scale-98 text-white text-xs font-black shadow-md shadow-indigo-200 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                   >
